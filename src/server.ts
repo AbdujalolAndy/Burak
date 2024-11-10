@@ -12,7 +12,7 @@ mongoose
         const PORT = process.env.PORT ?? 3005;
         const server = http.createServer(app);
         server.listen(PORT, () => {
-            console.log("DONE")
+            console.log(`The server is successfully listening on ${PORT}`)
         })
     })
     .catch((err) => console.log("ERROR: ", err.message))
