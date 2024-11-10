@@ -1,8 +1,8 @@
 import express from "express";
 import path from "path";
 import morgan from "morgan";
-import routerAdmin from "./routers/routerAdmin"
-import routerMain from "./routers/routerMain";
+import routerAdmin from "./routers/router-bssr"
+import routerMain from "./routers/router-spa";
 
 const app = express();
 
