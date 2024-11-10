@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import morgan from "morgan";
 import routerAdmin from "./routers/routerAdmin"
 import routerMain from "./routers/routerMain";
 
@@ -9,6 +10,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
+app.use(morgan(`:method :url [:response-time ms] \n`))
 
 /** 2-SESSION **/
 /** 3-VIEWS **/
