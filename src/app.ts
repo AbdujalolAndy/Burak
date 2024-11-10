@@ -10,15 +10,16 @@ const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-app.use(morgan(`:method :url [:response-time ms] \n`))
+app.use(morgan(`:method :url :response-time ms [:status] \n`))
 
 /** 2-SESSION **/
+
 /** 3-VIEWS **/
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 /** 4-ROUTER **/
-app.use("/", routerMain) //SPA: REACT
-app.use("/admin", routerAdmin)//BSSR: EJS
+app.use("/", routerMain)       //SPA: REACT
+app.use("/admin", routerAdmin) //BSSR: EJS
 
 export default app;
