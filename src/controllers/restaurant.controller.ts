@@ -32,20 +32,20 @@ restaurantController.getSignup = async (req: Request, res: Response) => {
 }
 restaurantController.processLogin = async (req: Request, res: Response) => {
     try {
-        console.log("processLogin");
+        console.log("METHOD: processLogin");
         const data = req.body;
 
         const member = new Member();
         const result = await member.processLogin(data)
         res.send(result)
     } catch (err: any) {
-        console.log("Error: processLogin", err)
+        console.log(`Error: processLogin, HttpCode: [${err.code}], Message: ${err.message}`)
         res.send(err)
     }
 }
 restaurantController.processSignup = async (req: Request, res: Response) => {
     try {
-        console.log("processSignup");
+        console.log("METHOD: processSignup");
         const data = req.body;
         data.memberType = MemberType.RESTAURANT;
 
@@ -53,7 +53,7 @@ restaurantController.processSignup = async (req: Request, res: Response) => {
         const result = await memberService.processSignup(data);
         res.send(result)
     } catch (err: any) {
-        console.log("Error: processSignup", err)
+        console.log(`Error: processSignup, HttpCode: [${err.code}], Message: ${err.message}`)
         res.send(err)
     }
 }
