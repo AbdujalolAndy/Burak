@@ -20,6 +20,7 @@ memberController.getLogIn = async(req:Request, res:Response)=>{
 }
 memberController.getSignUp = async(req:Request, res:Response)=>{
     try{
+        console.log("")
         res.send("Sign Up")
     }catch(err:any){
         console.log("Error: goHome", err)

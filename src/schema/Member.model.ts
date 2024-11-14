@@ -22,7 +22,7 @@ const MemberSchema = new Schema({
         index: { unique: true, sparse: true },
         required: true,
     },
-    memberPassord: {
+    memberPassword: {
         type: String,
         select: false,
         required: true
@@ -35,6 +35,10 @@ const MemberSchema = new Schema({
     },
     memberDesc: {
         type: String
+    },
+    memberPoints: {
+        type: Number,
+        default: 0,
     }
 }, { timestamps: true });
 
