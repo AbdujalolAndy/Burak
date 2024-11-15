@@ -10,6 +10,42 @@ class MemberService {
         this.memberModel = MemberModel
     }
 
+    //SPA
+    public async signup(input: MemberInput): Promise<Member> {
+        const salt = await bcryptjs.genSalt();
+        input.memberPassword = await bcryptjs.hash(input.memberPassword, salt);
+
+        try {
+            const member = await this.memberModel.create(input);
+            member.memberPassword = "";
+            member.toJson();
+            return member
+        } catch (err: any) {
+            throw new Errors(HttpCode.UNAUTHORIZED, Message.CREATE_FAILED)
+        }
+    }
+
+    public async login(input: LoginInput): Promise<Member> {
+        const exist = await this.memberModel
+            .findOne({ memberNick: input.memberNick }, { _id: 1, memberPassword: 1, memberNick: 1 })
+            .exec()
+
+        if (!exist) {
+            throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK)
+        }
+        try {
+            const isMatch: boolean = await bcryptjs.compare(input.memberPassword, exist.memberPassword);
+
+            if (!isMatch) {
+                throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
+            }
+            return await this.memberModel.findById({ _id: exist._id }).exec()
+        } catch (err: any) {
+            throw err
+        }
+    }
+
+    //SSR
     public async processSignup(input: MemberInput): Promise<Member> {
         const existData = await this.memberModel
             .find({ memberType: MemberType.RESTAURANT })
