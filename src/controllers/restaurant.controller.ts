@@ -81,5 +81,21 @@ restaurantController.processLogin = async (req: AdminRequest, res: Response) => 
     }
 }
 
+//Checking Verified client info;
+restaurantController.checkAuth = (req: AdminRequest, res: Response) => {
+    try {
+        console.log("METHOD: checkAuth");
+        if (req.session?.member) {
+            res.send(`<script>alert(${req.session?.member?.memberNick})</script>`)
+        } else {
+            res.send(`<script>alert(You are not authorized client!)</script>`)
+        }
+    } catch (err: any) {
+        console.log(`Error: processLogin, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
+        if (err instanceof Errors) res.status(err.code).json(err);
+        else res.status(Errors.standard.code).json(Errors.standard);
+    }
+}
+
 
 export default restaurantController
