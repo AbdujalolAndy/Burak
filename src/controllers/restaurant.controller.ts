@@ -8,6 +8,39 @@ import { LoginInput, Member, MemberInput } from "../libs/types/member/member.typ
 const restaurantController: T = {}
 
 //**SSR */
+restaurantController.goHome = (req: Request, res: Response) => {
+    try {
+        console.log("METHOD: goHome");
+        res.render("home")
+    } catch (err: any) {
+        console.log(`Error: goHome, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
+        if (err instanceof Errors) res.status(err.code).send(err);
+        else res.status(Errors.standard.code).send(Errors.standard);
+    }
+};
+
+restaurantController.getSignup = (req: Request, res: Response) => {
+    try {
+        console.log("METHOD: getSignup");
+        res.render("signup")
+    } catch (err: any) {
+        console.log(`Error: getSignup, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
+        if (err instanceof Errors) res.status(err.code).send(err);
+        else res.status(Errors.standard.code).send(Errors.standard);
+    }
+};
+
+restaurantController.getLogin = (req: Request, res: Response) => {
+    try {
+        console.log("METHOD: getLogin");
+        res.render("login")
+    } catch (err: any) {
+        console.log(`Error: getLogin, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
+        if (err instanceof Errors) res.status(err.code).send(err);
+        else res.status(Errors.standard.code).send(Errors.standard);
+    }
+};
+
 restaurantController.processSignup = async (req: Request, res: Response) => {
     try {
         console.log("METHOD: processSignup");
