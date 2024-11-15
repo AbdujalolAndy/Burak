@@ -14,8 +14,7 @@ restaurantController.goHome = (req: Request, res: Response) => {
         res.render("home")
     } catch (err: any) {
         console.log(`Error: goHome, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
-        if (err instanceof Errors) res.status(err.code).send(err);
-        else res.status(Errors.standard.code).send(Errors.standard);
+        res.redirect("/admin")
     }
 };
 
@@ -25,8 +24,7 @@ restaurantController.getSignup = (req: Request, res: Response) => {
         res.render("signup")
     } catch (err: any) {
         console.log(`Error: getSignup, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
-        if (err instanceof Errors) res.status(err.code).send(err);
-        else res.status(Errors.standard.code).send(Errors.standard);
+        res.redirect("/admin/signup")
     }
 };
 
@@ -36,8 +34,7 @@ restaurantController.getLogin = (req: Request, res: Response) => {
         res.render("login")
     } catch (err: any) {
         console.log(`Error: getLogin, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
-        if (err instanceof Errors) res.status(err.code).send(err);
-        else res.status(Errors.standard.code).send(Errors.standard);
+        res.redirect("/admin/login")
     }
 };
 
@@ -57,8 +54,7 @@ restaurantController.processSignup = async (req: AdminRequest, res: Response) =>
 
     } catch (err: any) {
         console.log(`Error: processSignup, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
-        if (err instanceof Errors) res.status(err.code).json(err);
-        else res.status(Errors.standard.code).json(Errors.standard);
+        res.redirect("/admin/signup")
     }
 }
 
@@ -76,8 +72,7 @@ restaurantController.processLogin = async (req: AdminRequest, res: Response) => 
         })
     } catch (err: any) {
         console.log(`Error: processLogin, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
-        if (err instanceof Errors) res.status(err.code).json(err);
-        else res.status(Errors.standard.code).json(Errors.standard);
+        res.redirect("/admin/login");
     }
 }
 
@@ -92,8 +87,7 @@ restaurantController.checkAuth = (req: AdminRequest, res: Response) => {
         }
     } catch (err: any) {
         console.log(`Error: processLogin, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
-        if (err instanceof Errors) res.status(err.code).json(err);
-        else res.status(Errors.standard.code).json(Errors.standard);
+        res.redirect("/admin")
     }
 }
 
