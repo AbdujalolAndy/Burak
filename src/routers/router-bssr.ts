@@ -10,5 +10,4 @@ router
 router
     .get("/signup", restaurantController.getSignup)
     .post("/signup", restaurantController.processSignup)
-
 export default router

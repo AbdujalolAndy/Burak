@@ -50,7 +50,7 @@ class MemberService {
         const existData = await this.memberModel
             .find({ memberType: MemberType.RESTAURANT })
             .exec();
-        if (!existData) {
+        if (existData) {
             throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED)
         }
         try {
