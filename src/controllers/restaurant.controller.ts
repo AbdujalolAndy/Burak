@@ -1,4 +1,4 @@
-import MemberService from "../models/Member.model";
+import MemberService from "../models/Member.service";
 import { AdminRequest, T } from "../libs/types/common";
 import { Request, Response } from "express"
 import { MemberType } from "../libs/enums/member.enum";
@@ -81,9 +81,9 @@ restaurantController.checkAuth = (req: AdminRequest, res: Response) => {
     try {
         console.log("METHOD: checkAuth");
         if (req.session?.member) {
-            res.send(`<script>alert(${req.session?.member?.memberNick})</script>`)
+            res.send(`<script>alert(Hi ${req.session?.member?.memberNick})</script>`)
         } else {
-            res.send(`<script>alert(You are not authorized client!)</script>`)
+            res.send(`<script>alert(${Message.UNAUTHORIZED})</script>`)
         }
     } catch (err: any) {
         console.log(`Error: processLogin, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)

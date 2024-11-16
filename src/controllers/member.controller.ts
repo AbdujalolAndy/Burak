@@ -2,7 +2,7 @@ import { T } from "../libs/types/common";
 import { Request, Response } from "express"
 import { LoginInput, Member, MemberInput } from "../libs/types/member/member.type";
 import Errors, { HttpCode } from "../libs/Error";
-import MemberService from "../models/Member.model";
+import MemberService from "../models/Member.service";
 
 const memberController: T = {}
 
