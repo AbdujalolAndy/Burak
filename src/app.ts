@@ -6,6 +6,7 @@ import routerMain from "./routers/router-spa";
 
 import session from "express-session";
 import MongodbSession from "connect-mongodb-session";
+import { localMemberVariable } from "./libs/middlewares/app.middleware";
 
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(
     })
 )
 
+app.use(localMemberVariable)
 /** 3-VIEWS **/
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
