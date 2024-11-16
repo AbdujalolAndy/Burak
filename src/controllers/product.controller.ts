@@ -17,20 +17,21 @@ productController.getAllProducts = async (req: Request, res: Response) => {
     }
 }
 
-productController.createProduct = async(req:Request, res:Response)=>{
-    try{
+productController.createProduct = async (req: Request, res: Response) => {
+    try {
         console.log("METHOD: createProduct");
-    }catch(err:any){
+        res.send('Done')
+    } catch (err: any) {
         console.log(`Error: createProduct, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
         else res.status(Errors.standard.code).json(Errors.standard);
     }
 }
 
-productController.updateChosenProduct = async(req:Request, res:Response)=>{
-    try{
+productController.updateChosenProduct = async (req: Request, res: Response) => {
+    try {
         console.log("METHOD: updateChosenOne")
-    }catch(err:any){
+    } catch (err: any) {
         console.log(`Error: updateChosenOne, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
         else res.status(Errors.standard.code).json(Errors.standard);

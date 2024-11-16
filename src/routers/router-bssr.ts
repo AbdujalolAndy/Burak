@@ -2,6 +2,7 @@ import { Router } from "express"
 import restaurantController from "../controllers/restaurant.controller";
 import productController from "../controllers/product.controller";
 import { verifyRestaurant } from "../libs/middlewares/restaurant.middleware";
+import { targetUploader } from "../libs/middlewares/app.middleware";
 const router = Router();
 
 /*************SSR**************/
@@ -11,7 +12,11 @@ router
     .get("/login", restaurantController.getLogin)
     .post("/login", restaurantController.processLogin);
 router
-    .get("/signup", restaurantController.getSignup)
+    .get(
+        "/signup",
+        targetUploader("members").single("memberImage"),
+        restaurantController.getSignup
+    )
     .post("/signup", restaurantController.processSignup);
 
 router.get("/check-auth", restaurantController.checkAuth);
@@ -26,6 +31,7 @@ router
     .post(
         "/product/create",
         verifyRestaurant,
+        targetUploader("products").array("productImages", 5),
         productController.createProduct
     )
     .post(
