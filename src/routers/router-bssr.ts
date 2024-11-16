@@ -1,6 +1,7 @@
 import { Router } from "express"
 import restaurantController from "../controllers/restaurant.controller";
 import productController from "../controllers/product.controller";
+import { verifyRestaurant } from "../libs/middlewares/restaurant.middleware";
 const router = Router();
 
 /*************SSR**************/
@@ -17,8 +18,20 @@ router.get("/check-auth", restaurantController.checkAuth);
 
 //PRODUCT
 router
-    .get("/product/all", productController.getAllProducts)
-    .post("/product/create", productController.createProduct)
-    .post("/product/:id", productController.updateChosenOne)
+    .get(
+        "/product/all",
+        verifyRestaurant,
+        productController.getAllProducts
+    )
+    .post(
+        "/product/create",
+        verifyRestaurant,
+        productController.createProduct
+    )
+    .post(
+        "/product/:id",
+        verifyRestaurant,
+        productController.updateChosenProduct
+    )
 
 export default router

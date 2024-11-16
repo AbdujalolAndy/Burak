@@ -27,7 +27,7 @@ productController.createProduct = async(req:Request, res:Response)=>{
     }
 }
 
-productController.updateChosenOne = async(req:Request, res:Response)=>{
+productController.updateChosenProduct = async(req:Request, res:Response)=>{
     try{
         console.log("METHOD: updateChosenOne")
     }catch(err:any){
