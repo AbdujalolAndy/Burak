@@ -1,8 +1,9 @@
 import MemberModel from "../schema/Member.model";
 import Errors, { HttpCode, Message } from "../libs/Error";
-import { MemberType } from "../libs/enums/member.enum";
+import { MemberStatus, MemberType } from "../libs/enums/member.enum";
 import bcryptjs from "bcryptjs"
-import { LoginInput, Member, MemberInput } from "../libs/types/member.type";
+import { LoginInput, Member, MemberInput, MemberUpdateInput } from "../libs/types/member.type";
+import { shapeIntoMongodbObject } from "../libs/config";
 
 class MemberService {
     private readonly memberModel;
@@ -46,6 +47,27 @@ class MemberService {
     }
 
     //SSR
+    public async getAllUsers(): Promise<Member[]> {
+        try {
+            const members = await this.memberModel.find({ memberType: MemberType.USER }).exec();
+            if (!members.length) new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+            return members
+        } catch (err: any) {
+            throw err
+        }
+    }
+
+    public async updateChosenUser(input: MemberUpdateInput): Promise<Member> {
+        try {
+            const memberId = shapeIntoMongodbObject(input._id);
+            const editedUser = await this.memberModel.findByIdAndUpdate(memberId, input, { new: true }).exec();
+            if (editedUser) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+            return editedUser
+        } catch (err: any) {
+            throw err
+        }
+    }
+
     public async processSignup(input: MemberInput): Promise<Member> {
         const existData = await this.memberModel
             .findOne({ memberType: MemberType.RESTAURANT })
@@ -59,7 +81,7 @@ class MemberService {
             const result = await this.memberModel.create(input);
             result.memberPassword = "";
             return result
-        } catch (err:any) {
+        } catch (err: any) {
             throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED)
         }
     }

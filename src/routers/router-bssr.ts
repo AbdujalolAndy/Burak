@@ -3,6 +3,7 @@ import restaurantController from "../controllers/restaurant.controller";
 import productController from "../controllers/product.controller";
 import { verifyRestaurant } from "../libs/middlewares/restaurant.middleware";
 import { targetUploader } from "../libs/middlewares/app.middleware";
+import memberController from "../controllers/member.controller";
 const router = Router();
 
 /*************SSR**************/
@@ -43,4 +44,15 @@ router
         productController.updateChosenProduct
     )
 
+//USER
+router.get(
+    "/user/all",
+    verifyRestaurant,
+    memberController.getAllUsers
+)
+router.post(
+    "/user/edit",
+    verifyRestaurant,
+    memberController.updateChosenUser
+)
 export default router

@@ -1,6 +1,6 @@
 import { T } from "../libs/types/common";
 import { Request, Response } from "express"
-import { LoginInput, Member, MemberInput } from "../libs/types/member.type";
+import { LoginInput, Member, MemberInput, MemberUpdateInput } from "../libs/types/member.type";
 import Errors, { HttpCode } from "../libs/Error";
 import MemberService from "../models/Member.service";
 
@@ -14,7 +14,7 @@ memberController.signup = async (req: Request, res: Response) => {
 
         const member = new MemberService(),
             result: Member = await member.signup(input);
-        //TOKEN
+        //TOKEN Authentication
 
         res.json({ member: result })
     } catch (err: any) {
@@ -31,7 +31,7 @@ memberController.login = async (req: Request, res: Response) => {
 
         const member = new MemberService(),
             result: Member = await member.login(input);
-        //TOKEN
+        //TOKEN Authentication
 
         res.json({ member: result })
     } catch (err: any) {
@@ -41,5 +41,36 @@ memberController.login = async (req: Request, res: Response) => {
     }
 }
 
+//SSR
+memberController.getAllUsers = async (req: Request, res: Response) => {
+    try {
+        console.log('METHOD: getAllUsers');
+
+        const member = new MemberService();
+        const members:Member[] = await member.getAllUsers();
+
+        console.log(members)
+        res.render("users", {members})
+    } catch (err: any) {
+        console.log(`Error: login, HttpCode: [${err.code}], Message: ${err.message}`);
+        if (err instanceof Errors) res.status(err.code).json(err);
+        else res.status(Errors.standard.code).json(Errors.standard);
+    }
+}
+
+memberController.updateChosenUser = async (req: Request, res: Response) => {
+    try {
+        console.log('METHOD: updateChosenUser');
+        const input:MemberUpdateInput = req.body;
+
+        const memeber = new MemberService(),
+        result:Member = await memeber.updateChosenUser(input)
+        res.status(HttpCode.OK).json({result});
+    } catch (err: any) {
+        console.log(`Error: login, HttpCode: [${err.code}], Message: ${err.message}`);
+        if (err instanceof Errors) res.status(err.code).json(err);
+        else res.status(Errors.standard.code).json(Errors.standard);
+    }
+}
 
 export default memberController
