@@ -14,10 +14,13 @@ router
 router
     .get(
         "/signup",
-        targetUploader("members").single("memberImage"),
         restaurantController.getSignup
     )
-    .post("/signup", restaurantController.processSignup);
+    .post(
+        "/signup",
+        targetUploader("members").single("memberImage"),
+        restaurantController.processSignup
+    );
 
 router.get("/check-auth", restaurantController.checkAuth);
 

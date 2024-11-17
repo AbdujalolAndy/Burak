@@ -48,7 +48,7 @@ class MemberService {
     //SSR
     public async processSignup(input: MemberInput): Promise<Member> {
         const existData = await this.memberModel
-            .find({ memberType: MemberType.RESTAURANT })
+            .findOne({ memberType: MemberType.RESTAURANT })
             .exec();
         if (existData) {
             throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED)
@@ -59,7 +59,7 @@ class MemberService {
             const result = await this.memberModel.create(input);
             result.memberPassword = "";
             return result
-        } catch (err) {
+        } catch (err:any) {
             throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED)
         }
     }

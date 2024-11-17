@@ -15,7 +15,6 @@ const getTargetUploader = (address: string) => {
             cb(null, `./upload/${address}`)
         },
         filename: (req, file, cb) => {
-            console.log(file);
             const extention = path.parse(file.originalname).ext;
             const randomName = v4() + extention
             cb(null, randomName)
