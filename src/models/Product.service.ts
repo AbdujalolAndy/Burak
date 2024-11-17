@@ -1,3 +1,4 @@
+import { ProductStatus } from "../libs/enums/product.enum";
 import { shapeIntoMongodbObject } from "../libs/config";
 import Errors, { HttpCode, Message } from "../libs/Error";
 import { Product, ProductInput, ProductUpdateInput } from "../libs/types/product.type";
@@ -12,6 +13,18 @@ class ProductService {
     //SPA
 
     //SSR
+    public async getAllProducts(): Promise<Product[]> {
+        try {
+            const result = await this.productModel.find({ productStatus: ProductStatus.PROCESS }).exec();
+            if (!result.length) {
+                throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+            }
+            return result
+        } catch (err: any) {
+            throw err;
+        }
+    }
+
     public async createProduct(input: ProductInput): Promise<Product> {
         try {
             return await this.productModel.create(input);

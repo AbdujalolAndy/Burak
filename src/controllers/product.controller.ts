@@ -14,7 +14,9 @@ const productController: T = {};
 productController.getAllProducts = async (req: Request, res: Response) => {
     try {
         console.log("METHOD: getAllProducts");
-        res.render("products");
+        const product = new ProductService();
+        const products: Product[] = await product.getAllProducts();
+        res.render("products", { products });
     } catch (err: any) {
         console.log(`Error: getAllProducts, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);

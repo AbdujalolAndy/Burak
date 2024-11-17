@@ -1,5 +1,11 @@
 <%-include("includes/header")%>
-<body style="background-color: greenyellow;">
-    <div><%-member.memberNick%> Products Page</div>
-</body>
+
+    <body style="background-color: greenyellow;">
+        <div><%-member.memberNick%> Products Page</div>
+        <%products.map((product, key)=>{ %>
+            <p>
+                <%=product.productName%>
+            </p>
+            <% }) %>
+    </body>
 <%-include("includes/footer")%>
