@@ -1,11 +1,16 @@
-import { HttpCode } from "../libs/Error";
-import { T } from "../libs/types/common";
+import { HttpCode, Message } from "../libs/Error";
+import { AdminRequest, T } from "../libs/types/common";
 import Errors from "../libs/Error";
 import { Request, Response } from "express";
+import ProductService from "../models/Product.service";
+import { Product, ProductInput } from "../libs/types/product.type";
 
 
 const productController: T = {};
 
+//SPA
+
+//SSR
 productController.getAllProducts = async (req: Request, res: Response) => {
     try {
         console.log("METHOD: getAllProducts");
@@ -17,20 +22,33 @@ productController.getAllProducts = async (req: Request, res: Response) => {
     }
 }
 
-productController.createProduct = async (req: Request, res: Response) => {
+productController.createProduct = async (req: AdminRequest, res: Response) => {
     try {
         console.log("METHOD: createProduct");
-        res.send('Done')
+        const input: ProductInput = req.body;
+        if (!req.files.length) new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
+        input.productImages = req.files?.map((ele) => { return ele.path })
+
+        const product = new ProductService();
+        await product.createProduct(input)
+
+        res.send(`<script>alert('Successfully created!'); window.location.replace("/admin/product/all")</script>`)
     } catch (err: any) {
         console.log(`Error: createProduct, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
-        if (err instanceof Errors) res.status(err.code).json(err);
-        else res.status(Errors.standard.code).json(Errors.standard);
+        const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+        res.send(`<script>alert('${message}'); window.location.replace("/admin/product/all")</script>`)
+
     }
 }
 
 productController.updateChosenProduct = async (req: Request, res: Response) => {
     try {
-        console.log("METHOD: updateChosenOne")
+        console.log("METHOD: updateChosenOne");
+        const id = req.params.id;
+
+        const product = new ProductService()
+        const result: Product = await product.updateChosenProduct(id, req.body);
+        res.status(HttpCode.OK).json({ data: result })
     } catch (err: any) {
         console.log(`Error: updateChosenOne, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);

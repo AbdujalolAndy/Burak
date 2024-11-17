@@ -1,8 +1,8 @@
 import MemberModel from "../schema/Member.model";
 import Errors, { HttpCode, Message } from "../libs/Error";
-import { LoginInput, Member, MemberInput } from "../libs/types/member/member.type";
 import { MemberType } from "../libs/enums/member.enum";
 import bcryptjs from "bcryptjs"
+import { LoginInput, Member, MemberInput } from "../libs/types/member.type";
 
 class MemberService {
     private readonly memberModel;

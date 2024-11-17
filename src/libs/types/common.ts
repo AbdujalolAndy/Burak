@@ -1,5 +1,5 @@
 import { Session } from "express-session"
-import { Member } from "./member/member.type";
+import { Member } from "./member.type";
 import { Request } from "express";
 
 export interface T {

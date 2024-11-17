@@ -1,6 +1,6 @@
-import { ObjectId, Document } from "mongoose";
-import { MemberStatus } from "../../enums/member.enum";
-import { MemberType } from "../../enums/member.enum";
+import { ObjectId} from "mongoose";
+import { MemberStatus } from "../enums/member.enum";
+import { MemberType } from "../enums/member.enum";
 
 export interface MemberInput {
     memberType?: MemberType;

@@ -3,7 +3,7 @@ import { AdminRequest, T } from "../libs/types/common";
 import { Request, Response } from "express"
 import { MemberType } from "../libs/enums/member.enum";
 import Errors, { HttpCode, Message } from "../libs/Error";
-import { LoginInput, Member, MemberInput } from "../libs/types/member/member.type";
+import { LoginInput, Member, MemberInput } from "../libs/types/member.type";
 
 const restaurantController: T = {}
 
