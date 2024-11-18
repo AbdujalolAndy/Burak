@@ -44,21 +44,23 @@
               </tr>
             </thead>
             <!--  LOOP PRODUCTS: START  -->
-            <tbody style="background: white">
-              <td>1</td>
-              <td>Steak</td>
-              <td>Dish</td>
-              <td>NORMAL</td>
-              <td>11</td>
-              <td>100</td>
-              <td>
-                <select class="spec-select new-product-status">
-                  <option value="PAUSE" selected>PAUSE</option>
-                  <option value="PROCESS">PROCESS</option>
-                  <option value="DELETE">DELETE</option>
-                </select>
-              </td>
-            </tbody>
+            <% products.map((product, value)=>{%>
+              <tbody style="background: white">
+                <td><%= value+1 %></td>
+                <td><%= product.productName %></td>
+                <td><%= product.productCollection%></td>
+                <td><%= product.productCollection==="DRINK"?product.productVolume:product.productSize %></td>
+                <td><%= product.productPrice%></td>
+                <td><%= product.productLeftCount%></td>
+                <td>
+                  <select class="spec-select new-product-status" key="<%=product._id%>">
+                    <option value="PAUSE"  <%=product.productStatus==="PAUSED"?"selected":""%> >PAUSE</option>
+                    <option value="PROCESS"<%=product.productStatus==="PROCESS"?"selected":""%>>PROCESS</option>
+                    <option value="DELETE" <%=product.productStatus==="DELETE"?"selected":""%>>DELETE</option>
+                  </select>
+                </td>
+              </tbody>
+                <%})%>
             <!--  LOOP PRODUCTS: END  -->
           </table>
           <div
@@ -71,6 +73,7 @@
           </div>
         </div>
         <form
+          onsubmit="return formValidation()"
           action="/admin/product/create"
           method="POST"
           class="dish-container"
@@ -164,7 +167,7 @@
                   id="file"
                   name="productImages"
                   class="image-one"
-                  required
+                  onchange="previewHandler(this, 1)"
                 />
               </div>
               <div class="upload-img-box">
@@ -174,6 +177,7 @@
                   id="file"
                   name="productImages"
                   class="image-two"
+                  onchange="previewHandler(this, 2)"
                 />
               </div>
               <div class="upload-img-box">
@@ -183,6 +187,7 @@
                   id="file"
                   name="productImages"
                   class="image-three"
+                  onchange="previewHandler(this, 3)"
                 />
               </div>
               <div class="upload-img-box">
@@ -192,6 +197,7 @@
                   id="file"
                   name="productImages"
                   class="image-four"
+                  onchange="previewHandler(this, 4)"
                 />
               </div>
               <div class="upload-img-box">
@@ -201,6 +207,7 @@
                   id="file"
                   name="productImages"
                   class="image-five"
+                  onchange="previewHandler(this, 5)"
                 />
               </div>
               <input name="restaurantIid" class="restaurant-id" hidden />

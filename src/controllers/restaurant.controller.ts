@@ -49,7 +49,7 @@ restaurantController.processSignup = async (req: AdminRequest, res: Response) =>
         const memberService = new MemberService();
         const result: Member = await memberService.processSignup(input);
 
-        req.session.member = result;
+        req.session.member = result; 
         req.session.save(function () {
             res.status(HttpCode.CREATED).redirect("/admin")
         })
