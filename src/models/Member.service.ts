@@ -27,11 +27,16 @@ class MemberService {
 
     public async login(input: LoginInput): Promise<Member> {
         const exist = await this.memberModel
-            .findOne({ memberNick: input.memberNick }, { _id: 1, memberPassword: 1, memberNick: 1 })
+            .findOne(
+                { memberNick: input.memberNick, memberStatus: { $ne: MemberStatus.DELETE } },
+                { _id: 1, memberPassword: 1, memberNick: 1, memberStatus: 1 }
+            )
             .exec()
 
         if (!exist) {
             throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK)
+        }else if(exist.memberStatus===MemberStatus.BLOCK){
+            throw new Errors(HttpCode.FORBIDDEN, Message.BLOCK_MEMBER)
         }
         try {
             const isMatch: boolean = await bcryptjs.compare(input.memberPassword, exist.memberPassword);
