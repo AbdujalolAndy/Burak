@@ -67,7 +67,7 @@
                   <td><%= member.memberNick %></td>
                   <td><%= member.memberPhone %></td>
                   <td style="width: 13%">
-                    <select class="spec-select member-status">
+                    <select class="spec-select member-status" key="<%= member._id %>">
                       <option value="ACTIVE" <%=member.memberStatus==="ACTIVE"?"selected":'' %>>ACTIVE</option>
                       <option value="BLOCK"  <%=member.memberStatus==="BLOCK"?"selected":'' %>>BLOCK</option>
                       <option value="DELETE" <%=member.memberStatus==="DELETE"?"selected":'' %>>DELETE</option>

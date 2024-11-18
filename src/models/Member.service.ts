@@ -60,7 +60,7 @@ class MemberService {
         try {
             const memberId = shapeIntoMongodbObject(input._id);
             const editedUser = await this.memberModel.findByIdAndUpdate(memberId, input, { new: true }).exec();
-            if (editedUser) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+            if (!editedUser) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
             return editedUser
         } catch (err: any) {
             throw err
