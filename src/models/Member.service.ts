@@ -19,7 +19,6 @@ class MemberService {
         try {
             const member = await this.memberModel.create(input);
             member.memberPassword = "";
-            member.toJson();
             return member
         } catch (err: any) {
             throw new Errors(HttpCode.UNAUTHORIZED, Message.CREATE_FAILED)

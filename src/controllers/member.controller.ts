@@ -49,7 +49,6 @@ memberController.getAllUsers = async (req: Request, res: Response) => {
         const member = new MemberService();
         const members:Member[] = await member.getAllUsers();
 
-        console.log(members)
         res.render("users", {members})
     } catch (err: any) {
         console.log(`Error: login, HttpCode: [${err.code}], Message: ${err.message}`);
