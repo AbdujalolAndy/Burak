@@ -51,12 +51,13 @@ restaurantController.processSignup = async (req: AdminRequest, res: Response) =>
 
         req.session.member = result;
         req.session.save(function () {
-            res.send(result)
+            res.status(HttpCode.CREATED).redirect("/admin")
         })
 
     } catch (err: any) {
         console.log(`Error: processSignup, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`)
-        res.redirect("/admin/signup")
+        const message = err instanceof Errors ? err.message: Message.SOMETHING_WENT_WRONG
+        res.send(`<script>alert("${message}"); window.location.replace("/admin/signup")</script>`)
     }
 }
 

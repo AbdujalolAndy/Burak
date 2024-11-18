@@ -1,10 +1,10 @@
 <%- include('includes/header') %>
 
-<link rel="stylesheet" type="text/css" href="/css/signup.css" />
+  <link rel="stylesheet" type="text/css" href="/css/signup.css" />
 
-<body>
-  <div class="signup-container">
-    <form action="/admin/signup" method="POST" enctype="multipart/form-data">
+  <body>
+    <div class="signup-container">
+      <form onsubmit="return validateForm()" action="/admin/signup" method="POST" enctype="multipart/form-data">
       <div class="signup-frame" style="width: 650px">
         <div class="signup-top">
           <span>Signup</span>
