@@ -1,4 +1,4 @@
-import { AdminRequest, T } from "../libs/types/common";
+import { AdminRequest, ExtendsRequest, T } from "../libs/types/common";
 import { Request, Response } from "express"
 import { LoginInput, Member, MemberInput, MemberUpdateInput } from "../libs/types/member.type";
 import Errors, { HttpCode } from "../libs/Error";
@@ -55,7 +55,7 @@ memberController.login = async (req: Request, res: Response) => {
 
         res.status(HttpCode.OK).json({ member: result, accessToken: token })
     } catch (err: any) {
-        console.log(`Error: login, HttpCode: [${err.code}], Message: ${err.message}`);
+        console.log(`Error: login, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
         else res.status(Errors.standard.code).json(Errors.standard);
     }
@@ -65,6 +65,26 @@ memberController.logout = (req: Request, res: Response) => {
     res.cookie("accessToken", null, { maxAge: 0, httpOnly: false })
 
     res.status(HttpCode.OK).json({ logout: true })
+}
+
+memberController.updateMember = async (req: ExtendsRequest, res: Response) => {
+    try {
+        const input: MemberUpdateInput = req.body;
+        if (req.file) input.memberImage = req.file.path.replace(/\\/g, "/");
+
+        const memberService = new MemberService();
+        const updatedMember = await memberService.updateMember(req.member, input);
+
+        const authService = new AuthService();
+        const updatedToken = await authService.createToken(updatedMember);
+
+        res.cookie("accessToken", updatedToken, { maxAge: AUTH_DURATION * 3600 * 1000, httpOnly: false });
+        res.status(HttpCode.OK).json({updatedMember})
+    } catch (err: any) {
+        console.log(`Error: updateMember, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
+        if (err instanceof Errors) res.status(err.code).json(err);
+        else res.status(Errors.standard.code).json(Errors.standard);
+    }
 }
 
 //SSR
@@ -77,7 +97,7 @@ memberController.getAllUsers = async (req: Request, res: Response) => {
 
         res.render("users", { members })
     } catch (err: any) {
-        console.log(`Error: login, HttpCode: [${err.code}], Message: ${err.message}`);
+        console.log(`Error: getAllUsers, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
         else res.status(Errors.standard.code).json(Errors.standard);
     }
@@ -92,20 +112,19 @@ memberController.updateChosenUser = async (req: Request, res: Response) => {
             result: Member = await memeber.updateChosenUser(input)
         res.status(HttpCode.OK).json({ result });
     } catch (err: any) {
-        console.log(`Error: login, HttpCode: [${err.code}], Message: ${err.message}`);
+        console.log(`Error: updateChosenUser, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
         else res.status(Errors.standard.code).json(Errors.standard);
     }
 }
 
-//*******************Testing******/
 memberController.getMemberDetail = async (req: AdminRequest, res: Response) => {
     try {
         const memberService = new MemberService();
         const member = await memberService.getMemberDetail(req.member)
-        res.status(HttpCode.OK).send(`The user ${member.memberNick} is verified!`);
+        res.status(HttpCode.OK).json({ member });
     } catch (err: any) {
-        console.log(`Error: login, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
+        console.log(`Error: getMemberDetail, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
         else res.status(Errors.standard.code).json(Errors.standard);
     }

@@ -8,10 +8,20 @@ const router = Router();
 
 /*************SSR**************/
 //RESTAURANT
-router.get("/", restaurantController.goHome);
 router
-    .get("/login", restaurantController.getLogin)
-    .post("/login", restaurantController.processLogin);
+    .get(
+        "/",
+        restaurantController.goHome
+    );
+router
+    .get(
+        "/login",
+        restaurantController.getLogin
+    )
+    .post(
+        "/login",
+        restaurantController.processLogin
+    );
 router
     .get(
         "/signup",
@@ -23,7 +33,11 @@ router
         restaurantController.processSignup
     );
 
-router.get("/check-auth", restaurantController.checkAuth);
+router
+    .get(
+        "/check-auth",
+        restaurantController.checkAuth
+    );
 
 //PRODUCT
 router
@@ -45,14 +59,16 @@ router
     )
 
 //USER
-router.get(
-    "/user/all",
-    verifyRestaurant,
-    memberController.getAllUsers
-)
-router.post(
-    "/user/edit",
-    verifyRestaurant,
-    memberController.updateChosenUser
-)
+router
+    .get(
+        "/user/all",
+        verifyRestaurant,
+        memberController.getAllUsers
+    )
+router
+    .post(
+        "/user/edit",
+        verifyRestaurant,
+        memberController.updateChosenUser
+    )
 export default router

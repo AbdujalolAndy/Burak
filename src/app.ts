@@ -19,6 +19,7 @@ const store = new MongodbStore({
 
 /** 1-ENTERANCE **/
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static("upload"))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(morgan(`:method :url :response-time ms [:status] \n`))

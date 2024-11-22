@@ -35,7 +35,7 @@ class MemberService {
 
         if (!exist) {
             throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK)
-        }else if(exist.memberStatus===MemberStatus.BLOCK){
+        } else if (exist.memberStatus === MemberStatus.BLOCK) {
             throw new Errors(HttpCode.FORBIDDEN, Message.BLOCK_MEMBER)
         }
         try {
@@ -50,14 +50,31 @@ class MemberService {
         }
     }
 
-    public async  getMemberDetail(member:any):Promise<Member>{
-        try{
+    public async getMemberDetail(member: any): Promise<Member> {
+        try {
             const id = shapeIntoMongodbObject(member._id);
-            const result = await this.memberModel.findOne({_id:id, memberStatus:MemberStatus.ACTIVE}).exec();
-            if(!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
+            const result = await this.memberModel.findOne({ _id: id, memberStatus: MemberStatus.ACTIVE }).exec();
+            if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
             return result;
-        }catch(err:any){
+        } catch (err: any) {
             throw err
+        }
+    }
+
+    public async updateMember(member: any, input: MemberUpdateInput): Promise<Member> {
+        try {
+            const id = shapeIntoMongodbObject(member._id);
+            const exist = await this.memberModel.findOne({ _id: id, memberStatus: MemberStatus.ACTIVE }).exec();
+            if (!exist) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
+
+            if (!input.memberImage) delete input.memberImage;
+
+            const result = await this.memberModel.findByIdAndUpdate(id, input, { new: true });
+            if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+
+            return result
+        } catch (err: any) {
+            throw err;
         }
     }
     //SSR
