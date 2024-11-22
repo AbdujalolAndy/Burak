@@ -14,7 +14,7 @@ class AuthService {
         const duration = `${AUTH_DURATION}h` as string;
         return new Promise((resolve, reject) => {
             jwt.sign(
-                {payload},
+                { payload },
                 this.secret,
                 { expiresIn: duration },
                 (error, token) => {
@@ -27,6 +27,21 @@ class AuthService {
                 }
             )
         })
+    }
+
+    public async verifyMember(token: string): Promise<Member> {
+        try {
+            const data = (await jwt.verify(token, this.secret)) as { payload: Member };
+            const member = data.payload;
+
+            if (member) console.debug(`----[AUTH]-----${member.memberNick}`);
+            else {
+                throw new Errors(HttpCode.UNAUTHORIZED, Message.UNAUTHORIZED)
+            }
+            return member
+        } catch (err: any) {
+            throw err
+        }
     }
 }
 

@@ -4,7 +4,10 @@ const router = Router();
 
 /*************SPA**************/
 router
-    .post("/signup", memberController.signup)
-    .post("/login", memberController.login)
+    .post("/member/signup", memberController.signup)
+    .post("/member/login", memberController.login)
+
+/*************SPA TEST**************/
+router.get("/member/verify", memberController.verifyMember)
 
 export default router
