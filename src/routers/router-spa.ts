@@ -2,11 +2,12 @@ import { Router } from "express"
 import memberController from "../controllers/member.controller";
 import { retrieveMember, verifyMember } from "../libs/middlewares/member.middleware";
 import { targetUploader } from "../libs/middlewares/app.middleware";
+import productController from "../controllers/product.controller";
 const router = Router();
 
-/*************SPA**************/
+/*****************SPA****************/
 
-//MEMBER
+/*****************MEMBER************/
 router.get(
     "/member/restaurant",
     memberController.getRestaurant
@@ -42,6 +43,10 @@ router
         memberController.getTopUsers
     )
 
-
-
+/*****************PRODUCTS************/
+router
+    .get(
+        "/product/all",
+        productController.getProducts
+    )
 export default router

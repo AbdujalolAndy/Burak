@@ -3,12 +3,36 @@ import { AdminRequest, T } from "../libs/types/common";
 import Errors from "../libs/Error";
 import { Request, Response } from "express";
 import ProductService from "../models/Product.service";
-import { Product, ProductInput } from "../libs/types/product.type";
+import { Product, ProductInput, ProductInquiry } from "../libs/types/product.type";
+import { ProductCollection } from "../libs/enums/product.enum";
 
 
 const productController: T = {};
 
 //SPA
+productController.getProducts = async (req: Request, res: Response) => {
+    try {
+        console.log("METHOD: getAllProducts");
+        const query = req.query;
+        const inquiry: ProductInquiry = {
+            page: Number(query.page),
+            limit: Number(query.limit),
+            order: String(query.order)
+        }
+
+        if (query.productCollection) { inquiry.productCollection = query.productCollection as ProductCollection };
+        if (query.search) { inquiry.search = query.search as string };
+
+        const productService = new ProductService();
+        const result = await productService.getProducts(inquiry);
+
+        res.status(HttpCode.OK).json({ result })
+    } catch (err: any) {
+        console.log(`Error: getAllProducts, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
+        if (err instanceof Errors) res.status(err.code).json(err);
+        else res.status(Errors.standard.code).json(Errors.standard);
+    }
+}
 
 //SSR
 productController.getAllProducts = async (req: Request, res: Response) => {
