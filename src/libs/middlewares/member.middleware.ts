@@ -18,7 +18,7 @@ export async function verifyMember(req: T, res: Response, next: NextFunction) {
     }
 }
 
-export async function RetrieveMember(req: T, res: Response, next: NextFunction) {
+export async function retrieveMember(req: T, res: Response, next: NextFunction) {
     try {
         const token = req.cookies.accessToken as string;
         if (!token) throw new Errors(HttpCode.UNAUTHORIZED, Message.UNAUTHORIZED);

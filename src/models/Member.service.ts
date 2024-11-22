@@ -77,6 +77,22 @@ class MemberService {
             throw err;
         }
     }
+
+    public async getTopUsers(): Promise<Member[]> {
+        try {
+            const members = await this.memberModel
+                .find({ memberStatus: MemberStatus.ACTIVE, memberType: MemberType.USER })
+                .gt("memberPoints",1)
+                .sort({ memberPoints: "desc" })
+                .limit(4)
+                .exec()
+
+            if (!members) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+            return members
+        } catch (err: any) {
+            throw err
+        }
+    }
     //SSR
     public async getAllUsers(): Promise<Member[]> {
         try {

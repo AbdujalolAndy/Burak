@@ -62,6 +62,7 @@ memberController.login = async (req: Request, res: Response) => {
 }
 
 memberController.logout = (req: Request, res: Response) => {
+    console.log("METHOD: logout")
     res.cookie("accessToken", null, { maxAge: 0, httpOnly: false })
 
     res.status(HttpCode.OK).json({ logout: true })
@@ -69,6 +70,7 @@ memberController.logout = (req: Request, res: Response) => {
 
 memberController.updateMember = async (req: ExtendsRequest, res: Response) => {
     try {
+        console.log("METHOD: updateMember")
         const input: MemberUpdateInput = req.body;
         if (req.file) input.memberImage = req.file.path.replace(/\\/g, "/");
 
@@ -79,9 +81,24 @@ memberController.updateMember = async (req: ExtendsRequest, res: Response) => {
         const updatedToken = await authService.createToken(updatedMember);
 
         res.cookie("accessToken", updatedToken, { maxAge: AUTH_DURATION * 3600 * 1000, httpOnly: false });
-        res.status(HttpCode.OK).json({updatedMember})
+        res.status(HttpCode.OK).json({ updatedMember })
     } catch (err: any) {
         console.log(`Error: updateMember, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
+        if (err instanceof Errors) res.status(err.code).json(err);
+        else res.status(Errors.standard.code).json(Errors.standard);
+    }
+}
+
+memberController.getTopUsers = async (req: ExtendsRequest, res: Response) => {
+    try {
+        console.log('METHOD: getAllUsers');
+
+        const memberService = new MemberService();
+        const members = await memberService.getTopUsers();
+
+        res.status(HttpCode.OK).json({ members })
+    } catch (err: any) {
+        console.log(`Error: getTopUsers, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
         else res.status(Errors.standard.code).json(Errors.standard);
     }
@@ -120,6 +137,7 @@ memberController.updateChosenUser = async (req: Request, res: Response) => {
 
 memberController.getMemberDetail = async (req: AdminRequest, res: Response) => {
     try {
+        console.log("METHOD: getMemberDetail")
         const memberService = new MemberService();
         const member = await memberService.getMemberDetail(req.member)
         res.status(HttpCode.OK).json({ member });

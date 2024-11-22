@@ -1,6 +1,6 @@
 import { Router } from "express"
 import memberController from "../controllers/member.controller";
-import { verifyMember } from "../libs/middlewares/member.middleware";
+import { retrieveMember, verifyMember } from "../libs/middlewares/member.middleware";
 import { targetUploader } from "../libs/middlewares/app.middleware";
 const router = Router();
 
@@ -31,6 +31,11 @@ router
         "/member/detail",
         verifyMember,
         memberController.getMemberDetail
+    )
+    .get(
+        "/member/top-users",
+        retrieveMember,
+        memberController.getTopUsers
     )
 
 
