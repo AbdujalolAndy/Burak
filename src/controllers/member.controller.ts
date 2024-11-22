@@ -1,4 +1,4 @@
-import { T } from "../libs/types/common";
+import { AdminRequest, T } from "../libs/types/common";
 import { Request, Response } from "express"
 import { LoginInput, Member, MemberInput, MemberUpdateInput } from "../libs/types/member.type";
 import Errors, { HttpCode } from "../libs/Error";
@@ -61,6 +61,12 @@ memberController.login = async (req: Request, res: Response) => {
     }
 }
 
+memberController.logout = (req: Request, res: Response) => {
+    res.cookie("accessToken", null, { maxAge: 0, httpOnly: false })
+
+    res.status(HttpCode.OK).json({ logout: true })
+}
+
 //SSR
 memberController.getAllUsers = async (req: Request, res: Response) => {
     try {
@@ -93,13 +99,11 @@ memberController.updateChosenUser = async (req: Request, res: Response) => {
 }
 
 //*******************Testing******/
-memberController.verifyMember = async (req: Request, res: Response) => {
+memberController.getMemberDetail = async (req: AdminRequest, res: Response) => {
     try {
-        const authService = new AuthService();
-        const token = req.cookies.accessToken as string;
-        const member = await authService.verifyMember(token);
-
-        res.status(HttpCode.OK).send(`The user ${member.memberNick} is verified!`)
+        const memberService = new MemberService();
+        const member = await memberService.getMemberDetail(req.member)
+        res.status(HttpCode.OK).send(`The user ${member.memberNick} is verified!`);
     } catch (err: any) {
         console.log(`Error: login, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);

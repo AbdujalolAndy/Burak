@@ -14,6 +14,7 @@ export enum Message {
     CREATE_FAILED = "Create is failed!",
     UPDATE_FAILED = "Update is failed!",
     UNAUTHORIZED = "You are not authorized user!",
+    UNAUTHENTICATED = "You are not authenticated!",
     NO_DATA_FOUND = "No Data found!",
     BLOCK_MEMBER = "You are blocked member, contact with the restaurant!",
 

@@ -50,6 +50,16 @@ class MemberService {
         }
     }
 
+    public async  getMemberDetail(member:any):Promise<Member>{
+        try{
+            const id = shapeIntoMongodbObject(member._id);
+            const result = await this.memberModel.findOne({_id:id, memberStatus:MemberStatus.ACTIVE}).exec();
+            if(!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
+            return result;
+        }catch(err:any){
+            throw err
+        }
+    }
     //SSR
     public async getAllUsers(): Promise<Member[]> {
         try {
