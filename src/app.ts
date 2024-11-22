@@ -7,6 +7,7 @@ import routerMain from "./routers/router-spa";
 import session from "express-session";
 import MongodbSession from "connect-mongodb-session";
 import { localMemberVariable } from "./libs/middlewares/app.middleware";
+import CookieParser from "cookie-parser"
 
 
 const app = express();
@@ -25,7 +26,7 @@ app.use(morgan(`:method :url :response-time ms [:status] \n`))
 /** 2-SESSION **/
 app.use(
     session({
-        secret: String(process.env.SECRET_TOKEN),
+        secret: String(process.env.SECRET_SESSION),
         cookie: {
             maxAge: 1000 * 3600 * 6, // 6h,
         },
@@ -34,6 +35,8 @@ app.use(
         saveUninitialized: true,
     })
 )
+
+app.use(CookieParser())
 
 app.use(localMemberVariable)
 /** 3-VIEWS **/
