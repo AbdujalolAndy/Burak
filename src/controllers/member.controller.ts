@@ -89,6 +89,21 @@ memberController.updateMember = async (req: ExtendsRequest, res: Response) => {
     }
 }
 
+memberController.getRestaurant = async (req: Request, res: Response) => {
+    try {
+        console.log("METHOD: getRestaurant");
+
+        const memberService = new MemberService();
+        const member = await memberService.getRestaurant();
+
+        res.status(HttpCode.OK).json({ member })
+    } catch (err: any) {
+        console.log(`Error: getTopUsers, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
+        if (err instanceof Errors) res.status(err.code).json(err);
+        else res.status(Errors.standard.code).json(Errors.standard);
+    }
+}
+
 memberController.getTopUsers = async (req: ExtendsRequest, res: Response) => {
     try {
         console.log('METHOD: getAllUsers');

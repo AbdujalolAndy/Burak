@@ -7,6 +7,10 @@ const router = Router();
 /*************SPA**************/
 
 //MEMBER
+router.get(
+    "/member/restaurant",
+    memberController.getRestaurant
+)
 router
     .post(
         "/member/signup",

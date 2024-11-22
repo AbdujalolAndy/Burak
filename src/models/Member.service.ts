@@ -44,7 +44,7 @@ class MemberService {
             if (!isMatch) {
                 throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
             }
-            return await this.memberModel.findById({ _id: exist._id }).exec()
+            return await this.memberModel.findById({ _id: exist._id }).lean().exec()
         } catch (err: any) {
             throw err
         }
@@ -82,13 +82,28 @@ class MemberService {
         try {
             const members = await this.memberModel
                 .find({ memberStatus: MemberStatus.ACTIVE, memberType: MemberType.USER })
-                .gt("memberPoints",1)
+                .gt("memberPoints", 1)
                 .sort({ memberPoints: "desc" })
                 .limit(4)
                 .exec()
 
             if (!members) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
             return members
+        } catch (err: any) {
+            throw err
+        }
+    }
+
+    public async getRestaurant(): Promise<Member> {
+        try {
+            const member = await this.memberModel
+                .findOne({ memberType: MemberType.RESTAURANT, memberStatus: MemberStatus.ACTIVE })
+                .lean()
+                .exec()
+
+            if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+            return member
         } catch (err: any) {
             throw err
         }
@@ -107,7 +122,7 @@ class MemberService {
     public async updateChosenUser(input: MemberUpdateInput): Promise<Member> {
         try {
             const memberId = shapeIntoMongodbObject(input._id);
-            const editedUser = await this.memberModel.findByIdAndUpdate(memberId, input, { new: true }).exec();
+            const editedUser = await this.memberModel.findByIdAndUpdate(memberId, input, { new: true }).lean().exec();
             if (!editedUser) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
             return editedUser
         } catch (err: any) {

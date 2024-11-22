@@ -14,7 +14,7 @@ class AuthService {
         const duration = `${AUTH_DURATION}h` as string;
         return new Promise((resolve, reject) => {
             jwt.sign(
-                { payload },
+                payload,
                 this.secret,
                 { expiresIn: duration },
                 (error, token) => {
@@ -31,8 +31,7 @@ class AuthService {
 
     public async verifyMember(token: string): Promise<Member> {
         try {
-            const data = (await jwt.verify(token, this.secret)) as { payload: Member };
-            const member = data.payload;
+            const member: Member = (await jwt.verify(token, this.secret)) as Member
 
             if (member) console.debug(`----[AUTH]-----${member.memberNick}`);
             else {
