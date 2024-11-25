@@ -4,14 +4,52 @@ import Errors, { HttpCode, Message } from "../libs/Error";
 import { Product, ProductInput, ProductInquiry, ProductUpdateInput } from "../libs/types/product.type";
 import ProductModel from "../schema/Product.model";
 import { T } from "../libs/types/common";
+import ViewService from "./View.service";
+import { ViewInput } from "../libs/types/view.type";
+import { ViewGroup } from "../libs/enums/view.enum";
 
 class ProductService {
     private readonly productModel;
+    public viewService;
+
     constructor() {
         this.productModel = ProductModel;
+        this.viewService = new ViewService()
     }
 
     //SPA
+    public async getProduct(member: T, id: string): Promise<Product> {
+        try {
+            const productId = shapeIntoMongodbObject(id);
+
+
+            let product = await this.productModel.findOne({ _id: productId }).exec();
+            if (!product) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+            if (member) {
+                const memberId = shapeIntoMongodbObject(member._id);
+                const input: ViewInput = {
+                    memberId: memberId,
+                    viewRefId: productId,
+                    viewGroup: ViewGroup.PRODUCT
+                }
+                const exist = await this.viewService.checkExsistenceView(input);
+                if (!exist) {
+                    await this.viewService.insertNewViewer(input);
+                    product = await this.productModel
+                        .findOneAndUpdate(
+                            { _id: productId },
+                            { $inc: { productViews: 1 } },
+                            { new: true }
+                        ).exec();
+                }
+            }
+
+            return product
+        } catch (err: any) {
+            throw err
+        }
+    }
     public async getProducts(input: ProductInquiry): Promise<Product[]> {
         try {
             const { limit, page } = input

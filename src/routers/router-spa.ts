@@ -49,4 +49,9 @@ router
         "/product/all",
         productController.getProducts
     )
+    .get(
+        "/product/:id",
+        retrieveMember,
+        productController.getProduct
+    )
 export default router

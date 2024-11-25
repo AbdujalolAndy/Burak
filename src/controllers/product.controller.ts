@@ -1,5 +1,5 @@
 import { HttpCode, Message } from "../libs/Error";
-import { AdminRequest, T } from "../libs/types/common";
+import { AdminRequest, ExtendsRequest, T } from "../libs/types/common";
 import Errors from "../libs/Error";
 import { Request, Response } from "express";
 import ProductService from "../models/Product.service";
@@ -10,6 +10,23 @@ import { ProductCollection } from "../libs/enums/product.enum";
 const productController: T = {};
 
 //SPA
+productController.getProduct = async (req: ExtendsRequest, res: Response) => {
+    try {
+        console.log("Method: getProduct");
+        const { id } = req.params;
+
+        const productService = new ProductService();
+        const product = await productService.getProduct(req.member, id);
+
+        res.status(HttpCode.OK).json({ product })
+    } catch (err: any) {
+        console.log(`Error: getProduct, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
+        if (err instanceof Errors) res.status(err.code).json(err);
+        else res.status(Errors.standard.code).json(Errors.standard);
+    }
+}
+
+
 productController.getProducts = async (req: Request, res: Response) => {
     try {
         console.log("METHOD: getAllProducts");
