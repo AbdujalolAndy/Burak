@@ -1,8 +1,8 @@
 import OrderService from "../models/Order.service";
 import { ExtendsRequest, T } from "../libs/types/common";
-import Errors, { HttpCode } from "../libs/Error";
+import Errors, { HttpCode, Message } from "../libs/Error";
 import { Response } from "express";
-import { OrderInquiry, OrderItemInput } from "../libs/types/order.type";
+import { Order, OrderInquiry, OrderItemInput, UpdateOrderInput } from "../libs/types/order.type";
 import { OrderStatus } from "../libs/enums/order.enum";
 
 const orderController: T = {};
@@ -16,7 +16,7 @@ orderController.createOrder = async (req: ExtendsRequest, res: Response) => {
 
         const order = await orderService.createOrder(member, input);
 
-        res.status(HttpCode.CREATED).json({ order })
+        res.status(HttpCode.CREATED).json(order)
     } catch (err: any) {
         console.log(`Error: createOrder, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
@@ -33,15 +33,32 @@ orderController.getOrders = async (req: ExtendsRequest, res: Response) => {
             limit: Number(inquiry.limit),
             orderStatus: inquiry.orderStatus as OrderStatus,
         }
-        
+
         const orders = await orderService.getOrders(req.member, orderInquiry);
 
-        res.status(HttpCode.OK).json({ orders })
+        res.status(HttpCode.OK).json(orders)
     } catch (err: any) {
         console.log(`Error: getOrders, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
         else res.status(Errors.standard.code).json(Errors.standard);
     }
 }
+
+orderController.updateOrder = async (req: ExtendsRequest, res: Response) => {
+    try {
+        console.log("METHOD: updateOrder");
+        const input: UpdateOrderInput = req.body;
+
+        const udpatedOrder: Order = await orderService.updateOrder(req.member, input);
+
+        res.status(HttpCode.CREATED).json(udpatedOrder)
+    } catch (err: any) {
+        console.log(`Error: updateOrder, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
+        if (err instanceof Errors) res.status(err.code).json(err);
+        else res.status(Errors.standard.code).json(Errors.standard);
+    }
+}
+
+
 
 export default orderController;

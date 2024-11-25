@@ -4,6 +4,7 @@ import { MemberStatus, MemberType } from "../libs/enums/member.enum";
 import bcryptjs from "bcryptjs"
 import { LoginInput, Member, MemberInput, MemberUpdateInput } from "../libs/types/member.type";
 import { shapeIntoMongodbObject } from "../libs/config";
+import mongoose from "mongoose";
 
 class MemberService {
     private readonly memberModel;
@@ -166,6 +167,10 @@ class MemberService {
         } catch (err: any) {
             throw err
         }
+    }
+
+    public async updateMemberPoint(memberId:mongoose.Schema.Types.ObjectId, point:number):Promise<void>{
+        await this.memberModel.findByIdAndUpdate(memberId, {$inc:{memberPoints:1}});
     }
 }
 

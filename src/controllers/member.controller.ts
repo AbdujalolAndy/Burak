@@ -96,7 +96,7 @@ memberController.getRestaurant = async (req: Request, res: Response) => {
         const memberService = new MemberService();
         const member = await memberService.getRestaurant();
 
-        res.status(HttpCode.OK).json({ member })
+        res.status(HttpCode.OK).json(member)
     } catch (err: any) {
         console.log(`Error: getTopUsers, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
@@ -111,7 +111,7 @@ memberController.getTopUsers = async (req: ExtendsRequest, res: Response) => {
         const memberService = new MemberService();
         const members = await memberService.getTopUsers();
 
-        res.status(HttpCode.OK).json({ members })
+        res.status(HttpCode.OK).json(members)
     } catch (err: any) {
         console.log(`Error: getTopUsers, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
@@ -142,7 +142,7 @@ memberController.updateChosenUser = async (req: Request, res: Response) => {
 
         const memeber = new MemberService(),
             result: Member = await memeber.updateChosenUser(input)
-        res.status(HttpCode.OK).json({ result });
+        res.status(HttpCode.OK).json(result);
     } catch (err: any) {
         console.log(`Error: updateChosenUser, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
@@ -155,7 +155,7 @@ memberController.getMemberDetail = async (req: AdminRequest, res: Response) => {
         console.log("METHOD: getMemberDetail")
         const memberService = new MemberService();
         const member = await memberService.getMemberDetail(req.member)
-        res.status(HttpCode.OK).json({ member });
+        res.status(HttpCode.OK).json(member);
     } catch (err: any) {
         console.log(`Error: getMemberDetail, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);

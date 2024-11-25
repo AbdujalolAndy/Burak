@@ -57,14 +57,21 @@ router
     )
 
 /****ORDER*****/
-router.post(
-    "/order/create",
-    verifyMember,
-    orderController.createOrder
-)
-router.get(
-    "/order/all",
-    verifyMember,
-    orderController.getOrders
-)
+router
+    .post(
+        "/order/create",
+        verifyMember,
+        orderController.createOrder
+    )
+    .get(
+        "/order/all",
+        verifyMember,
+        orderController.getOrders
+    )
+    .post(
+        "/order/update",
+        verifyMember,
+        orderController.updateOrder
+    )
+
 export default router
