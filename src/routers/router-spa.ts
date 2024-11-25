@@ -58,8 +58,13 @@ router
 
 /****ORDER*****/
 router.post(
-    "/order/create", 
+    "/order/create",
     verifyMember,
     orderController.createOrder
+)
+router.get(
+    "/order/all",
+    verifyMember,
+    orderController.getOrders
 )
 export default router

@@ -1,4 +1,4 @@
-import { OrderInput, OrderItem, OrderItemInput } from "../libs/types/order.type";
+import { OrderInput, OrderInquiry, OrderItem, OrderItemInput } from "../libs/types/order.type";
 import { Member } from "../libs/types/member.type";
 import OrderModel from "../schema/Order.model";
 import OrderItemModel from "../schema/OrderItem.model";
@@ -55,6 +55,40 @@ class OrderService {
             await Promise.all(pendingList);
         } catch (err: any) {
             throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED)
+        }
+    }
+
+    public async getOrders(member: Member, orderInquiry: OrderInquiry): Promise<Order[]> {
+        try {
+            const { page, limit, orderStatus } = orderInquiry
+            const match = { memberId: shapeIntoMongodbObject(member._id), orderStatus: orderStatus };
+
+            const orders = await this.orderModel.aggregate([
+                { $match: match },
+                { $sort:{updatedAt:1} },
+                { $skip: (page - 1) * limit },
+                { $limit: limit },
+                {
+                    $lookup:{
+                        from:"orderItems",
+                        localField:'_id',
+                        foreignField:"orderId",
+                        as:"orderItems"
+                    }
+                },
+                {
+                    $lookup:{
+                        from:"products",
+                        localField:"orderItems.productId",
+                        foreignField:"_id",
+                        as:"productsData"
+                    }
+                }
+            ]).exec()
+
+            return orders
+        } catch (err: any) {
+            throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND)
         }
     }
 }
