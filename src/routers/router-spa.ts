@@ -3,11 +3,12 @@ import memberController from "../controllers/member.controller";
 import { retrieveMember, verifyMember } from "../libs/middlewares/member.middleware";
 import { targetUploader } from "../libs/middlewares/app.middleware";
 import productController from "../controllers/product.controller";
+import orderController from "../controllers/order.controller";
 const router = Router();
 
 /*****************SPA****************/
 
-/*****************MEMBER************/
+/*****MEMBER*******/
 router.get(
     "/member/restaurant",
     memberController.getRestaurant
@@ -43,7 +44,7 @@ router
         memberController.getTopUsers
     )
 
-/*****************PRODUCTS************/
+/****PRODUCTS*****/
 router
     .get(
         "/product/all",
@@ -54,4 +55,11 @@ router
         retrieveMember,
         productController.getProduct
     )
+
+/****ORDER*****/
+router.post(
+    "/order/create", 
+    verifyMember,
+    orderController.createOrder
+)
 export default router
