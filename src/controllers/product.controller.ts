@@ -43,7 +43,7 @@ productController.getProducts = async (req: Request, res: Response) => {
         const productService = new ProductService();
         const result = await productService.getProducts(inquiry);
 
-        res.status(HttpCode.OK).json({ result })
+        res.status(HttpCode.OK).json(result)
     } catch (err: any) {
         console.log(`Error: getAllProducts, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
@@ -70,7 +70,7 @@ productController.createProduct = async (req: AdminRequest, res: Response) => {
         console.log("METHOD: createProduct");
         const input: ProductInput = req.body;
         if (!req.files.length) new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
-        input.productImages = req.files?.map((ele) => { return ele.path })
+        input.productImages = req.files?.map((ele) => { return ele.path.replace(/\\/g, "/") })
 
         const product = new ProductService();
         await product.createProduct(input)

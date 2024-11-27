@@ -8,6 +8,7 @@ import session from "express-session";
 import MongodbSession from "connect-mongodb-session";
 import { localMemberVariable } from "./libs/middlewares/app.middleware";
 import CookieParser from "cookie-parser"
+import cors from "cors"
 
 
 const app = express();
@@ -19,10 +20,11 @@ const store = new MongodbStore({
 
 /** 1-ENTERANCE **/
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static("upload"))
+app.use("/upload", express.static("upload"))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(morgan(`:method :url :response-time ms [:status] \n`))
+app.use(cors({origin:true, credentials:true}))
 
 /** 2-SESSION **/
 app.use(
