@@ -18,7 +18,8 @@ memberController.signup = async (req: Request, res: Response) => {
             result: Member = await member.signup(input);
 
         const authService = new AuthService();
-        const token = await authService.createToken(result);
+        //@ts-ignore
+        const token = await authService.createToken(result.toObject());
 
         res.cookie("accessToken", token,
             {
