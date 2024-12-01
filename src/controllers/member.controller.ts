@@ -28,7 +28,7 @@ memberController.signup = async (req: Request, res: Response) => {
             }
         );
 
-        res.json({ member: result })
+        res.status(HttpCode.CREATED).json({ member: result, accessToekn: token })
     } catch (err: any) {
         console.log(`Error: signup, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
@@ -82,7 +82,7 @@ memberController.updateMember = async (req: ExtendsRequest, res: Response) => {
         const updatedToken = await authService.createToken(updatedMember);
 
         res.cookie("accessToken", updatedToken, { maxAge: AUTH_DURATION * 3600 * 1000, httpOnly: false });
-        res.status(HttpCode.OK).json({ updatedMember })
+        res.status(HttpCode.OK).json( updatedMember )
     } catch (err: any) {
         console.log(`Error: updateMember, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);

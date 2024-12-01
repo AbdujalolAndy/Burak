@@ -18,7 +18,7 @@ productController.getProduct = async (req: ExtendsRequest, res: Response) => {
         const productService = new ProductService();
         const product = await productService.getProduct(req.member, id);
 
-        res.status(HttpCode.OK).json({ product })
+        res.status(HttpCode.OK).json(product)
     } catch (err: any) {
         console.log(`Error: getProduct, HttpCode: [${err.code ?? HttpCode.INTERNAL_SERVER_ERROR}], Message: ${err.message}`);
         if (err instanceof Errors) res.status(err.code).json(err);
