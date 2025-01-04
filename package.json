@@ -25,8 +25,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/server.ts",
     "start:dev": "nodemon --exec ts-node src/server.ts",
-    "start:prod":"set NODE_ENV=production&& node dist/server.js",
-    "build": "tsc"
+    "start:prod": "set NODE_ENV=production&& node dist/server.js",
+    "build": "tsc && node extra.js"
   },
   "author": "MIT",
   "license": "ISC",
@@ -39,6 +39,7 @@
     "ejs": "^3.1.10",
     "express": "^4.21.1",
     "express-session": "^1.17.3",
+    "fs-extra": "^11.2.0",
     "http": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.9",
