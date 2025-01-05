@@ -56,7 +56,7 @@ app.use("/", routerMain)       //SPA
 app.use("/admin", routerAdmin) //SSR
 
 const server = http.createServer(app);
-const io = new SocketIOServer(server);
+const io = new SocketIOServer(server, { cors: { origin: true } });
 
 let totalClients = 0
 const socketClients = new Map()
@@ -93,7 +93,7 @@ io.on("connection", async (client) => {
 
     //GET NEW MESSAGE
     client.on("message", (msg) => {
-        const {text} = JSON.parse(msg)
+        const { text } = JSON.parse(msg)
         const msgPayload: MessagePayload = {
             event: "message",
             text,
